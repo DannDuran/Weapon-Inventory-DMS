@@ -1,0 +1,112 @@
+import java.util.Scanner;
+import java.util.ArrayList;
+
+/*
+ * Daniel Duran
+ * CEN 3024 - Software Development 1
+ * June 14, 2025
+ * Main.java
+ *
+ * The overall program objective is to simulate a video game style inventory system where players (users)
+ * can manage various weapons. This program allows users to
+ * access a list of weapons and add, remove, edit, list, and combine any weapon.
+ *
+ *
+ * This class is responsible for displaying a main menu for users to interact with. It calls all needed methods to
+ * accomplish each task
+ */
+
+/*
+    Method Name: Main
+    Method Purpose: This method's purpose is to display the menu for the user to select each option from.
+                    It contains the switch that calls all the other methods.
+    Method Arguments: None
+    Method Return value: None
+ */
+
+public class Main {
+    public static void main(String[] args) {
+        int choice;
+        boolean error;
+       ArrayList<weapon> weaponList = new ArrayList<weapon>();
+       weapon newWeapon = new weapon();
+       weapon testWeapon = new weapon();
+       testWeapon.setName("testWeapon");
+       testWeapon.setType("Gun");
+       testWeapon.setDmgType("Pierce");
+       testWeapon.setPrice(2000);
+       testWeapon.setDmgVal(500);
+       testWeapon.setHitRate(75);
+
+       weaponList.add(testWeapon);
+
+        Scanner a = new Scanner(System.in);
+
+        do {
+            do {
+                System.out.println("\n\t\t\t\tMAIN MENU");
+                System.out.println("_______________________________________________");
+                System.out.println("\t1. Add new weapon from a text file");
+                System.out.println("\t2. Add new weapon manually");
+                System.out.println("\t3. Remove weapon from database");
+                System.out.println("\t4. List all weapons");
+                System.out.println("\t5. Combine Weapons");
+                System.out.println("\t6. Edit Weapon");
+                System.out.println("\t7. Exit Program");
+
+                System.out.println("\nEnter Here: ");
+                choice = a.nextInt();
+
+                switch (choice) {
+                    case 1:
+                        error = false;
+                        System.out.println("\n\tADD NEW WEAPON FROM TEXT FILE\n");
+                        readfile r = new readfile();
+                        weaponList.add(r.scanfile(weaponList));
+                        System.out.println("\n\tRETURNING TO MAIN MENU...\n");
+                        break;
+                    case 2:
+                        error = false;
+                        System.out.println("\n\tADD NEW WEAPON MANUALLY\n");
+                        newWeapon = weapon.addManual(weaponList);
+                        weaponList.add(newWeapon);
+                        System.out.println("\n\tRETURNING TO MAIN MENU...\n");
+                        break;
+                    case 3:
+                        error = false;
+                        System.out.println("\n\tREMOVE WEAPON FROM DATABASE\n");
+                        weapon.removeWeapon(weaponList);
+                        System.out.println("\n\tRETURNING TO MAIN MENU...\n");
+                        break;
+                    case 4:
+                        error = false;
+                        System.out.println("\n\tLIST ALL WEAPONS\n");
+                        weapon.listWeapons(weaponList);
+                        System.out.println("\n\tRETURNING TO MAIN MENU...\n");
+                        break;
+                    case 5:
+                        error = false;
+                        System.out.println("\n\tCOMBINE WEAPONS\n");
+                        newWeapon = weapon.combineWeapon(weaponList);
+                        weaponList.add(newWeapon);
+                        System.out.println("\n\tRETURNING TO MAIN MENU...\n");
+                        break;
+                    case 6:
+                        error = false;
+                        System.out.println("\n\tEDIT WEAPON\n");
+                        weapon.editWeapon(weaponList);
+                        System.out.println("\tRETURNING TO MAIN MENU...\n");
+                        break;
+                    case 7:
+                        error = false;
+                        System.out.println("\n\tEXITING PROGRAM...\n");
+                        break;
+                    default:
+                        error = true;
+                        System.out.println("\tError: You must pick an option from 1-7!");
+                        System.out.println("\tRETURNING TO MAIN MENU...\n");
+                }
+            } while (error);
+        } while(choice != 7);
+    }
+    }
