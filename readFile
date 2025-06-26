@@ -1,5 +1,8 @@
-import java.io.*;
-import java.util.*;
+package weapon;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /*
@@ -12,10 +15,9 @@ import java.util.Scanner;
  */
 
 public class readfile {
-    Scanner x;
-    Scanner input = new Scanner(System.in);
-    String dir,str;
-    File file;
+    static Scanner x;
+    static String str;
+    static File file;
 
     /*
     Method name: scanFile
@@ -24,11 +26,9 @@ public class readfile {
     Method Arguments: weaponList
     Method Return Value: None
      */
-    public weapon scanfile(ArrayList<weapon> weaponList) {
+    public static weapon scanfile(String dir) {
         weapon weapon1 = new weapon();
-        int choice;
         boolean confirm = false;
-        boolean error = false;
 
         String name = null;
         String type = null;
@@ -37,27 +37,21 @@ public class readfile {
         double dmgVal = 0;
         double hitRate = 0;
 
-        do {
             System.out.println("\tWhen entering a weapon through a text file ensure that all parameters are separated by a dash.");
             System.out.println("\tExample: weaponName-Fist-Strike-200-35-84");
 
-            do {
-                System.out.println("\nPlease type the directory of the file: ");
-                System.out.println("Example: C:\\Users\\danie\\Documents\\intelliJ projects\\inventory system\\src\\weapon.txt");
-                dir = input.nextLine();
-                file = new File(dir);
 
+            System.out.println("\nPlease type the directory of the file: ");
+            System.out.println("Example: C:\\Users\\danie\\Documents\\intelliJ projects\\inventory system\\src\\weapon.txt");
+            file = new File(dir);
 
-                try {
-                    x = new Scanner(file);
-                    System.out.println("File located.");
-                    error = false;
-                } catch (FileNotFoundException e) {
-                    System.out.println("\n\tError: File not found.");
-                    System.out.println("\n\tPlease check spelling and try again.");
-                    error = true;
-                }
-            } while (error);
+            try {
+                x = new Scanner(file);
+                System.out.println("File located.");
+            } catch (FileNotFoundException e) {
+                System.out.println("\n\tError: File not found.");
+                System.out.println("\n\tPlease check spelling and try again.");
+            }
 
             while (x.hasNext()) {
                 str = x.nextLine();
@@ -81,22 +75,9 @@ public class readfile {
                 System.out.println("\n\tDoes this look correct?");
                 System.out.println("\t1. Yes, add this weapon.");
                 System.out.println("\t2. No, let me re-enter my weapon.");
-                choice = input.nextInt();
-                input.nextLine();
 
-                switch (choice) {
-                    case 1:
-                        confirm = true;
-                        break;
-                    case 2:
-                        confirm = false;
-                        break;
-                    default:
-                        error = true;
-                        System.out.println("Error: Please select 1 or 2.");
-                }
+                confirm = true;
             }
-        } while (!confirm);
 
         weapon1.setName(name);
         weapon1.setType(type);
