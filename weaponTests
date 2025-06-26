@@ -1,0 +1,186 @@
+package weapon;
+
+import org.junit.jupiter.api.DisplayName;
+
+import java.util.ArrayList;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class weaponTest {
+
+    @org.junit.jupiter.api.Test
+    @DisplayName("Add Weapon Manually Test")
+    void addManual() {
+        weapon testWeapon = new weapon();
+        weapon weapon1;
+
+        testWeapon.setName("testWeapon");
+        testWeapon.setType("Sword");
+        testWeapon.setDmgType("Slash");
+        testWeapon.setPrice(100);
+        testWeapon.setDmgVal(20);
+        testWeapon.setHitRate(50.2);
+
+        weapon1 = weapon.addManual("testWeapon", "Sword", "Slash", 100, 20.0, 50.2);
+
+        System.out.println("\n\n\tExpected:" + testWeapon.toString() + "\n\n\tActual:" + weapon1.toString());
+
+        //assertEquals(testWeapon, weapon1);
+        assertEquals(testWeapon.getName(), weapon1.getName());
+        assertEquals(testWeapon.getType(), weapon1.getType());
+        assertEquals(testWeapon.getDmgType(), weapon1.getDmgType());
+        assertEquals(testWeapon.getPrice(), weapon1.getPrice());
+        assertEquals(testWeapon.getDmgVal(), weapon1.getDmgVal());
+        assertEquals(testWeapon.getHitRate(), weapon1.getHitRate());
+    }
+
+    @org.junit.jupiter.api.Test
+    @DisplayName("Read Weapon From File Test")
+    void readFile() {
+        String dir = "C:\\Users\\danie\\Documents\\intelliJ projects\\Junit Test\\src\\weapon\\txt files\\14.txt";
+        weapon txtWeapon = new weapon();
+        weapon testWeapon = new weapon();
+
+        testWeapon.setName("Metal Knuckle");
+        testWeapon.setType("Fist");
+        testWeapon.setDmgType("Strike");
+        testWeapon.setPrice(150);
+        testWeapon.setDmgVal(18);
+        testWeapon.setHitRate(96);
+
+        txtWeapon = readfile.scanfile(dir);
+
+        System.out.println("\n\n\tExpected:" + testWeapon.toString() + "\n\n\tActual:" + txtWeapon.toString());
+
+        assertEquals(testWeapon.getName(), txtWeapon.getName());
+        assertEquals(testWeapon.getType(), txtWeapon.getType());
+        assertEquals(testWeapon.getDmgType(), txtWeapon.getDmgType());
+        assertEquals(testWeapon.getPrice(), txtWeapon.getPrice());
+        assertEquals(testWeapon.getDmgVal(), txtWeapon.getDmgVal());
+        assertEquals(testWeapon.getHitRate(), txtWeapon.getHitRate());
+    }
+
+    @org.junit.jupiter.api.Test
+    @DisplayName("Remove Weapon Test")
+    void removeWeapon(){
+        weapon testWeapon = new weapon();
+        ArrayList <weapon> weaponList = new ArrayList<>();
+        boolean success = false;
+        boolean test = true;
+
+        testWeapon.setName("testWeapon");
+        testWeapon.setType("Sword");
+        testWeapon.setDmgType("Slash");
+        testWeapon.setPrice(100);
+        testWeapon.setDmgVal(20);
+        testWeapon.setHitRate(50.2);
+
+        weaponList.add(testWeapon);
+        success = weapon.removeWeapon(weaponList, "testWeapon");
+
+        assertEquals(test, success);
+
+    }
+
+    @org.junit.jupiter.api.Test
+    @DisplayName("List Weapons Test")
+    void listWeapons(){
+        weapon testWeapon = new weapon();
+        weapon testWeapon2 = new weapon();
+        boolean test = true;
+        boolean success;
+        ArrayList <weapon> weaponList = new ArrayList<>();
+
+        testWeapon.setName("testWeapon");
+        testWeapon.setType("Fist");
+        testWeapon.setDmgType("Pierce");
+        testWeapon.setPrice(3);
+        testWeapon.setDmgVal(8900);
+        testWeapon.setHitRate(87);
+
+        testWeapon2.setName("testWeapon2");
+        testWeapon2.setType("Sword");
+        testWeapon2.setDmgType("Strike");
+        testWeapon2.setPrice(442);
+        testWeapon2.setDmgVal(900);
+        testWeapon2.setHitRate(50);
+
+        weaponList.add(testWeapon);
+        weaponList.add(testWeapon2);
+
+        success = weapon.listWeapons(weaponList);
+
+        assertEquals(test, success);
+    }
+
+    @org.junit.jupiter.api.Test
+    @DisplayName("Combine Weapons Test")
+    void combineWeapon(){
+        ArrayList <weapon> weaponList = new ArrayList<>();
+        weapon weapon1 = new weapon();
+        weapon weapon2 = new weapon();
+        weapon testWeapon = new weapon();
+        weapon wpn = new weapon();
+
+        weapon1.setName("weapon1");
+        weapon1.setType("Sword");
+        weapon1.setDmgType("Slash");
+        weapon1.setPrice(100);
+        weapon1.setDmgVal(20);
+        weapon1.setHitRate(50);
+
+        weapon2.setName("weapon2");
+        weapon2.setType("Fist");
+        weapon2.setPrice(230);
+        weapon2.setDmgType("Strike");
+        weapon2.setDmgVal(30);
+        weapon2.setHitRate(99);
+
+        testWeapon.setName(weapon1.getName() + " + " + weapon2.getName());
+        testWeapon.setDmgType(weapon1.getDmgType());
+        testWeapon.setType(weapon1.getType());
+        testWeapon.setPrice(weapon1.getPrice() + weapon2.getPrice());
+        testWeapon.setDmgVal((weapon1.getDmgVal() + weapon2.getDmgVal()) / 2);
+        testWeapon.setHitRate((weapon1.getHitRate() + weapon2.getHitRate()) / 2);
+
+        weaponList.add(weapon1);
+        weaponList.add(weapon2);
+        wpn = weapon.combineWeapon(weaponList, "weapon1", "weapon2");
+
+        System.out.println("\n\n\tExpected:" + testWeapon.toString() + "\n\n\tActual:" + wpn.toString());
+
+        assertEquals(testWeapon.getName(), wpn.getName());
+        assertEquals(testWeapon.getType(), wpn.getType());
+        assertEquals(testWeapon.getDmgType(), wpn.getDmgType());
+        assertEquals(testWeapon.getPrice(), wpn.getPrice());
+        assertEquals(testWeapon.getDmgVal(), wpn.getDmgVal());
+        assertEquals(testWeapon.getHitRate(), wpn.getHitRate());
+    }
+
+    @org.junit.jupiter.api.Test
+    @DisplayName("Edit Weapons Test")
+    void editWeapon(){
+    ArrayList<weapon> weaponList = new ArrayList<>();
+    weapon weapon1 = new weapon();
+    weapon testWeapon = new weapon();
+
+    weapon1.setName("weapon1");
+    weapon1.setType("Sword");
+    weapon1.setDmgType("Slash");
+    weapon1.setPrice(100);
+    weapon1.setDmgVal(20);
+    weapon1.setHitRate(50);
+
+    weaponList.add(weapon1);
+
+    testWeapon.setName("newName");
+    testWeapon.setType("Gun");
+    testWeapon.setDmgType("Pierce");
+    testWeapon.setPrice(25);
+    testWeapon.setDmgVal(100);
+    testWeapon.setHitRate(99);
+
+    weapon.editWeapon(weaponList, "weapon1", "newName", "Gun", "Pierce", 25, 100, 99, 3);
+
+    assertEquals(testWeapon.getDmgType(), weapon1.getDmgType());
+    }
+}
