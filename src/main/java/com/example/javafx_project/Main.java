@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.*;
@@ -15,11 +16,22 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
 
+
+/**
+ * Daniel Duran
+ * CEN 3024 - Software Development 1
+ * July 18, 2025.
+ * Main.java
+ * This program will allow users to supply and access a database of weapons where they can add new weapons, remove
+ * pre-existing ones, display a list of all currently held weapons, update any field of any weapon, and create a new
+ * weapon by combining two pre-existing weapons.
+ */
+
 public class Main extends Application {
 
-    Button goBack1, goBack2, goBack3, goBack4, goBack5, goBack6, addManualweapon, list, remove, update, combine, exit;
+    Button goBack1, goBack2, goBack3, goBack4, goBack5, addManualweapon, list, remove, update, combine, exit;
     Stage window;
-    Scene addDB, mainMenu, newDB, addManualScene, listScene, removeScene, updateScene, combineScene, exitScene;
+    Scene addDB, mainMenu, newDB, addManualScene, listScene, removeScene, updateScene, combineScene;
     String dbURL;
     Connection dbConnect;
     ResultSet result1;
@@ -32,6 +44,15 @@ public class Main extends Application {
         launch();
     }
 
+    /**
+     * Daniel Duran
+     * CEN 3024 - Software Development 1
+     * July 18, 2025.
+     * start.java
+     * This method displays the GUI the user will use to perform all the program's functions.
+     * @param primaryStage The main stage where all the menus are displayed
+     * @throws Exception If a database is not found or if an SQL command fails.
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
         window = primaryStage;
@@ -316,18 +337,21 @@ public class Main extends Application {
             }
             if(Objects.equals(selection, "Weapon Type")){
                 updateLabel4.setText("Please enter the new weapon type");
-                TextField newThing = new TextField();
-                Button typeSubmit = new Button("Submit New Weapon Type");
-                typeSubmit.setOnAction(a -> {
+                ComboBox newThing = new ComboBox();
+                newThing.getItems().add("Sword");
+                newThing.getItems().add("Gun");
+                newThing.getItems().add("Fist");
+                Button dmgTypeSubmit = new Button("Submit New Damage Type");
+                dmgTypeSubmit.setOnAction(a -> {
                     for(int i = 0; i < observableList.size(); i++) {
                         if (allWpns.getValue() == observableList.get(i)) {
-                            oldType = observableList.get(i).getType();
+                            oldName = observableList.get(i).getName();
                         }
                     }
-                    String typeStr = newThing.getText();
+                    String dmgTypeStr = ((String) newThing.getValue());
 
                     try {
-                        String sql = "Update Weapons set WeaponType = \"" + typeStr + "\" Where WeaponType = \"" + oldType + "\"";
+                        String sql = "Update Weapons set DamageType = \"" + dmgTypeStr + "\" Where Name = \"" + oldName + "\"";
                         System.out.println(sql);
 
                         statement = dbConnect.createStatement();
@@ -344,22 +368,25 @@ public class Main extends Application {
                     }
                 });
                 updateLayout.getChildren().add(7, newThing);
-                updateLayout.getChildren().add(8, typeSubmit);
+                updateLayout.getChildren().add(8, dmgTypeSubmit);
             }
             if(Objects.equals(selection, "Damage Type")){
                 updateLabel4.setText("Please enter the new damage type");
-                TextField newThing = new TextField();
+                ComboBox newThing = new ComboBox();
+                newThing.getItems().add("Slash");
+                newThing.getItems().add("Strike");
+                newThing.getItems().add("Pierce");
                 Button dmgTypeSubmit = new Button("Submit New Damage Type");
                 dmgTypeSubmit.setOnAction(a -> {
                     for(int i = 0; i < observableList.size(); i++) {
                         if (allWpns.getValue() == observableList.get(i)) {
-                            oldDmgType = observableList.get(i).getDmgType();
+                            oldName = observableList.get(i).getName();
                         }
                     }
-                    String dmgTypeStr = newThing.getText();
+                    String dmgTypeStr = ((String) newThing.getValue());
 
                     try {
-                        String sql = "Update Weapons set DamageType = \"" + dmgTypeStr + "\" Where DamageType = \"" + oldDmgType + "\"";
+                        String sql = "Update Weapons set DamageType = \"" + dmgTypeStr + "\" Where Name = \"" + oldName + "\"";
                         System.out.println(sql);
 
                         statement = dbConnect.createStatement();
@@ -522,6 +549,13 @@ public class Main extends Application {
         window.show();
     }
 
+    /**
+     * Daniel Duran
+     * CEN 3024 - Software Development 1
+     * July 18, 2025
+     * closeProgram.java
+     * This class simply ends the program when called. It will be used whenever the user selects the 'exit' button.
+     */
     public void closeProgram(){
         window.close();
     }
