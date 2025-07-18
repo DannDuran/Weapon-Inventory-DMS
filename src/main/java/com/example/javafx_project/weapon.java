@@ -60,6 +60,14 @@ public class weapon {
         this.hitRate = hitRate;
     }
 
+    /**
+     * Daniel Duran
+     * CEN 3024 - Software Development 1
+     * July 18, 2025.
+     * addManual.java
+     * This method allows the user to add a new weapon to the database by
+     * manually inputting all the parameters for the new weapon.
+     */
     public static weapon addManual(ArrayList<weapon> weaponList){
         weapon weapon1 = new weapon();
 
@@ -160,6 +168,16 @@ public class weapon {
         return weapon1;
     }
 
+    /**
+     * Daniel Duran
+     * CEN 3024 - Software Development 1
+     * July 18, 2025.
+     * removeWeapon.java
+     * This method allows the user to remove a weapon from the database by
+     * inputting the weapon's name. The method then searches through
+     * all the currently held weapons and removes the one that has the same name
+     * as the user's input.
+     */
     public static void removeWeapon(ArrayList<weapon> weaponList) {
         Scanner input = new Scanner(System.in);
         String weaponName;
@@ -217,12 +235,27 @@ public class weapon {
         }while(!confirm);
     }
 
+    /**
+     * Daniel Duran
+     * CEN 3024 - Software Development 1
+     * July 18, 2025.
+     * listWeapons.java
+     * This method iterates through the list of currently held weapons and displays the details of each weapon.
+     */
     public static void listWeapons(ArrayList<weapon> weaponList) {
         for (int i = 0; i < weaponList.size(); i++) {
             System.out.println("\t\tWeapon " + (i + 1) + weaponList.get(i).toString() + "\n");
         }
     }
 
+    /**
+     * Daniel Duran
+     * CEN 3024 - Software Development 1
+     * July 18, 2025.
+     * combineWeapons.java
+     * This method asks the user to select two weapons from the list and
+     * creates a new weapon using the parameters of the two selected weapons.
+     */
     public static weapon combineWeapon(ArrayList<weapon> weaponList){
         weapon wpn1 = new weapon();
         weapon wpn2 = new weapon();
@@ -330,6 +363,15 @@ public class weapon {
         System.out.println("\n\t\tNEW WEAPON SUCCESSFULLY CREATED");
         return fusedWeapon;
     }
+
+    /**
+     * Daniel Duran
+     * CEN 3024 - Software Development 1
+     * July 18, 2025.
+     * editWeapon.java
+     * This method asks the user to select a weapon from the list and
+     * change one of its parameters.
+     */
     public static void editWeapon(ArrayList<weapon> weaponList){
         Scanner input = new Scanner(System.in);
         String weaponName;
@@ -479,7 +521,14 @@ public class weapon {
             } while (error);
         }while(!confirm);
     }
-    
+
+    /**
+     * Daniel Duran
+     * CEN 3024 - Software Development 1
+     * July 18, 2025.
+     * toString.java
+     * This method displays all of a weapon's parameters.
+     */
     public String toString() {
         return
                 "\t\nName: " + name +
