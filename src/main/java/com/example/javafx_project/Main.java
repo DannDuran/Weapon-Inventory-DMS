@@ -3,18 +3,14 @@ package com.example.javafx_project;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import javax.swing.*;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.Scanner;
 
 
 /**
@@ -31,14 +27,14 @@ public class Main extends Application {
 
     Button goBack1, goBack2, goBack3, goBack4, goBack5, addManualweapon, list, remove, update, combine, exit;
     Stage window;
-    Scene addDB, mainMenu, newDB, addManualScene, listScene, removeScene, updateScene, combineScene;
+    Scene addDB, mainMenu, addManualScene, listScene, removeScene, updateScene, combineScene;
     String dbURL;
     Connection dbConnect;
     ResultSet result1;
     Statement statement;
     ArrayList<weapon> weaponList = new ArrayList<>();
     ObservableList<weapon> observableList = FXCollections.observableList(weaponList);
-    String oldName, oldType, oldDmgType, oldPrice, oldDmgVal, oldHitRate;
+    String oldName;
 
     public static void main(String[] args) {
         launch();
@@ -65,8 +61,8 @@ public class Main extends Application {
 
 
         //Main Menu
-        Label label = new Label("\tWEAPON INVENTORY" +
-                "\n\tPlease select what action you would like to perform!");
+        Label mainLabel1 = new Label("MAIN MENU");
+        Label mainLabel2 = new Label("Please select what action you would like to perform!");
 
         Button newDBbutton = new Button("Select new database");
         newDBbutton.setOnAction(e -> window.setScene(addDB));
@@ -93,6 +89,7 @@ public class Main extends Application {
         Label db = new Label("Please type the directory to a database file.\tExample: C:\\Users\\danie\\Desktop\\weapons.db");
         Label err = new Label("");
         TextField dbText = new TextField();
+        dbText.setMaxWidth(500);
         Button submit1 = new Button("Submit");
         submit1.setOnAction(e -> {
             weaponListView1.getItems().clear();
@@ -117,7 +114,6 @@ public class Main extends Application {
 
                 statement = connection.createStatement();
                 result1 = statement.executeQuery(sql);
-                int c = 1;
 
                 while (result1.next()) {
                     weapon newWeapon = new weapon();
@@ -134,8 +130,6 @@ public class Main extends Application {
                     weaponListView3.getItems().add(newWeapon);
                     weaponListView4.getItems().add(newWeapon);
                     weaponList.add(newWeapon);
-
-                    c++;
                 }
 
                 window.setScene(mainMenu);
@@ -156,6 +150,7 @@ public class Main extends Application {
 
         Label enterName = new Label("Enter the name of the new weapon.");
         TextField wpnName = new TextField();
+        wpnName.setMaxWidth(400);
 
         Label enterType = new Label("Select the type of weapon.");
         ComboBox selType = new ComboBox();
@@ -171,12 +166,16 @@ public class Main extends Application {
 
         Label enterPrice = new Label("Enter the weapon's price");
         TextField wpnPrice = new TextField();
+        wpnPrice.setMaxWidth(100);
 
         Label enterDmgVal = new Label("Enter the amount of damage the weapon will do.");
         TextField wpnDmg = new TextField();
+        wpnDmg.setMaxWidth(100);
 
         Label enterHitRate = new Label ("Enter the weapon's hit rate. \nMust be a value between 0 - 100.");
         TextField wpnHit = new TextField();
+        wpnHit.setMaxWidth(100);
+
 
         Button submit = new Button("Submit");
         submit.setOnAction(e -> {
@@ -191,7 +190,12 @@ public class Main extends Application {
 
             if (hitRate < 0 || hitRate > 100) {
                 error = true;
-                manualResult.setText("Error!: Hit rate entered must be a value between 0 - 100!");
+                manualResult.setText("Error: Hit rate entered must be a value between 0 - 100!");
+            }
+
+            if (Objects.equals(name, "") || Objects.equals(type, "") || Objects.equals(dmgType, "") || Objects.equals(price, "") || Objects.equals(dmgVal, "") || Objects.equals(hitRate, "")){
+                error = true;
+                manualResult.setText("Error: One or more of your entries were blank.");
             }
 
             if (error != true){
@@ -240,6 +244,8 @@ public class Main extends Application {
         Label removeLabel2 = new Label("Please type the name of the weapon to remove.");
         Label removeResult = new Label("");
         TextField removeText = new TextField();
+        removeText.setMaxWidth(500);
+
 
         Button removeButton = new Button("Submit");
         removeButton.setOnAction(e -> {
@@ -299,13 +305,15 @@ public class Main extends Application {
 
 
         Label updateLabel4 = new Label("");
-        Button submit2 = new Button("Submit");
+        Button submit2 = new Button("Submit Selection");
+        Label result2 = new Label("");
         submit2.setOnAction(e -> {
             String selection = ((String) allPara.getValue());
 
             if(Objects.equals(selection, "Name")){
                 updateLabel4.setText("Please enter the new name");
                 TextField newThing = new TextField();
+                newThing.setMaxWidth(500);
                 Button nameSubmit = new Button("Submit New Name");
                 nameSubmit.setOnAction(a -> {
                     for(int i = 0; i < observableList.size(); i++) {
@@ -321,11 +329,7 @@ public class Main extends Application {
 
                         statement = dbConnect.createStatement();
                         int result1 = statement.executeUpdate(sql);
-
-                        weaponListView1.refresh();
-                        weaponListView2.refresh();
-                        weaponListView3.refresh();
-                        weaponListView4.refresh();
+                        result2.setText("Weapon successfully updated! Please reload the database to see any changes.");
 
                     } catch (SQLException ex) {
                         System.out.println("Error");
@@ -334,6 +338,7 @@ public class Main extends Application {
                 });
                 updateLayout.getChildren().add(7, newThing);
                 updateLayout.getChildren().add(8, nameSubmit);
+                updateLayout.getChildren().add(result2);
             }
             if(Objects.equals(selection, "Weapon Type")){
                 updateLabel4.setText("Please enter the new weapon type");
@@ -356,11 +361,7 @@ public class Main extends Application {
 
                         statement = dbConnect.createStatement();
                         int result1 = statement.executeUpdate(sql);
-
-                        weaponListView1.refresh();
-                        weaponListView2.refresh();
-                        weaponListView3.refresh();
-                        weaponListView4.refresh();
+                        result2.setText("Weapon successfully updated! Please reload the database to see any changes.");
 
                     } catch (SQLException ex) {
                         System.out.println("Error");
@@ -369,6 +370,7 @@ public class Main extends Application {
                 });
                 updateLayout.getChildren().add(7, newThing);
                 updateLayout.getChildren().add(8, dmgTypeSubmit);
+                updateLayout.getChildren().add(result2);
             }
             if(Objects.equals(selection, "Damage Type")){
                 updateLabel4.setText("Please enter the new damage type");
@@ -391,11 +393,7 @@ public class Main extends Application {
 
                         statement = dbConnect.createStatement();
                         int result1 = statement.executeUpdate(sql);
-
-                        weaponListView1.refresh();
-                        weaponListView2.refresh();
-                        weaponListView3.refresh();
-                        weaponListView4.refresh();
+                        result2.setText("Weapon successfully updated! Please reload the database to see any changes.");
 
                     } catch (SQLException ex) {
                         System.out.println("Error");
@@ -404,20 +402,107 @@ public class Main extends Application {
                 });
                 updateLayout.getChildren().add(7, newThing);
                 updateLayout.getChildren().add(8, dmgTypeSubmit);
+                updateLayout.getChildren().add(result2);
             }
             if(Objects.equals(selection, "Price")){
                 updateLabel4.setText("Please enter the new price");
+                TextField newThing = new TextField();
+                newThing.setMaxWidth(500);
+                Button priceSubmit = new Button("Submit New Price");
+                priceSubmit.setOnAction(a -> {
+                    for(int i = 0; i < observableList.size(); i++) {
+                        if (allWpns.getValue() == observableList.get(i)) {
+                            oldName = observableList.get(i).getName();
+                        }
+                    }
+                    String nameStr = newThing.getText();
+
+                    try {
+                        String sql = "Update Weapons set Price = \"" + nameStr + "\" Where Name = \"" + oldName + "\"";
+                        System.out.println(sql);
+
+                        statement = dbConnect.createStatement();
+                        int result1 = statement.executeUpdate(sql);
+                        result2.setText("Weapon successfully updated! Please reload the database to see any changes.");
+
+                    } catch (SQLException ex) {
+                        System.out.println("Error");
+                        throw new RuntimeException(ex);
+                    }
+                });
+                updateLayout.getChildren().add(7, newThing);
+                updateLayout.getChildren().add(8, priceSubmit);
+                updateLayout.getChildren().add(result2);
             }
             if(Objects.equals(selection, "Damage Value")){
                 updateLabel4.setText("Please enter the new damage value");
+                TextField newThing = new TextField();
+                newThing.setMaxWidth(500);
+                Button dmgValSubmit = new Button("Submit New Damage Value");
+                dmgValSubmit.setOnAction(a -> {
+                    for(int i = 0; i < observableList.size(); i++) {
+                        if (allWpns.getValue() == observableList.get(i)) {
+                            oldName = observableList.get(i).getName();
+                        }
+                    }
+                    String nameStr = newThing.getText();
+
+                    try {
+                        String sql = "Update Weapons set DamageValue = \"" + nameStr + "\" Where Name = \"" + oldName + "\"";
+                        System.out.println(sql);
+
+                        statement = dbConnect.createStatement();
+                        int result1 = statement.executeUpdate(sql);
+                        result2.setText("Weapon successfully updated! Please reload the database to see any changes.");
+
+                    } catch (SQLException ex) {
+                        System.out.println("Error");
+                        throw new RuntimeException(ex);
+                    }
+                });
+                updateLayout.getChildren().add(7, newThing);
+                updateLayout.getChildren().add(8, dmgValSubmit);
+                updateLayout.getChildren().add(result2);
             }
             if(Objects.equals(selection, "Hit Rate")){
                 updateLabel4.setText("Please enter the new hit rate");
+                TextField newThing = new TextField();
+                newThing.setMaxWidth(500);
+                Button hitRateSubmit = new Button("Submit New Hit Rate");
+                hitRateSubmit.setOnAction(a -> {
+                    for(int i = 0; i < observableList.size(); i++) {
+                        if (allWpns.getValue() == observableList.get(i)) {
+                            oldName = observableList.get(i).getName();
+                        }
+                    }
+                    String nameStr = newThing.getText();
+
+                    try {
+                        String sql = "Update Weapons set HitRate = \"" + nameStr + "\" Where Name = \"" + oldName + "\"";
+                        System.out.println(sql);
+
+                        statement = dbConnect.createStatement();
+                        int result1 = statement.executeUpdate(sql);
+
+                        result2.setText("Weapon successfully updated! Please reload the database to see any changes.");
+                    } catch (SQLException ex) {
+                        System.out.println("Error");
+                        throw new RuntimeException(ex);
+                    }
+                });
+                updateLayout.getChildren().add(7, newThing);
+                updateLayout.getChildren().add(8, hitRateSubmit);
+                updateLayout.getChildren().add(result2);
+
             }
+            weaponListView1.refresh();
+            weaponListView2.refresh();
+            weaponListView3.refresh();
+            weaponListView4.refresh();
         });
 
         goBack1 = new Button("Return");
-        goBack1.setOnAction(e -> window.setScene(mainMenu));
+        goBack1.setOnAction(e -> {window.setScene(mainMenu);});
 
         // Combine weapon Screen
         Label combineLabel = new Label("\tCOMBINE WEAPON");
@@ -427,9 +512,11 @@ public class Main extends Application {
 
         Label combineWpn1 = new Label("Please enter the name of the first weapon you would like to use.");
         TextField wpn1 = new TextField();
+        wpn1.setMaxWidth(500);
 
         Label combineWpn2 = new Label("Please enter the name of the second weapon you would like to use.");
         TextField wpn2 = new TextField();
+        wpn2.setMaxWidth(500);
 
         Button combineButton = new Button("Submit");
         combineButton.setOnAction(e -> {
@@ -512,36 +599,42 @@ public class Main extends Application {
 
         // Add Database Display
         VBox databaseLayout = new VBox(20);
+        databaseLayout.setAlignment(Pos.CENTER);
         databaseLayout.getChildren().addAll(db, dbText, err, submit1, exit2);
         addDB = new Scene(databaseLayout, 800, 600);
 
         // Main Menu Display
         VBox mainMenuLayout = new VBox(20);
-        mainMenuLayout.getChildren().addAll(label, newDBbutton, addManualweapon, list, remove, update, combine, exit);
+        mainMenuLayout.setAlignment(Pos.CENTER);
+        mainMenuLayout.getChildren().addAll(mainLabel1, mainLabel2, newDBbutton, addManualweapon, list, remove, update, combine, exit);
         mainMenu = new Scene(mainMenuLayout, 800, 600);
 
         // Add Manually Display
         VBox addManualLayout = new VBox(20);
+        addManualLayout.setAlignment(Pos.CENTER);
         addManualLayout.getChildren().addAll(addManualLabel, enterName, wpnName, enterType, selType, enterDmgType, selDmgType, enterPrice, wpnPrice, enterDmgVal, wpnDmg, enterHitRate, wpnHit, submit, manualResult, goBack2);
         addManualScene = new Scene(addManualLayout, 800, 700);
 
         // List Display
         VBox listLayout = new VBox(20);
+        listLayout.setAlignment(Pos.CENTER);
         listLayout.getChildren().addAll(listLabel, weaponListView1, goBack3);
         listScene = new Scene(listLayout, 800, 600);
 
         // Remove Display
         VBox removeLayout = new VBox(20);
+        removeLayout.setAlignment(Pos.CENTER);
         removeLayout.getChildren().addAll(removeLabel, weaponListView2, removeLabel2, removeText, removeButton, removeResult, goBack4);
         removeScene = new Scene(removeLayout, 800, 800);
 
         // Update Display
-
+        updateLayout.setAlignment(Pos.CENTER);
         updateLayout.getChildren().addAll(updateLabel, updateLabel2, allWpns, updateLabel3, allPara, submit2, updateLabel4, goBack1);
         updateScene = new Scene(updateLayout, 800, 800);
 
         // Combine Display
         VBox combineLayout = new VBox(20);
+        combineLayout.setAlignment(Pos.CENTER);
         combineLayout.getChildren().addAll(combineLabel, weaponListView3, combineWpn1, wpn1, combineWpn2, wpn2, combineButton, combineResult1, combineResult2, combineSuccess, goBack5);
         combineScene = new Scene(combineLayout, 800, 900);
 
@@ -552,7 +645,7 @@ public class Main extends Application {
     /**
      * Daniel Duran
      * CEN 3024 - Software Development 1
-     * July 18, 2025
+     * July 18, 2025.
      * closeProgram.java
      * This class simply ends the program when called. It will be used whenever the user selects the 'exit' button.
      */
